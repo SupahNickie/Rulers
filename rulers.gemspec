@@ -6,11 +6,11 @@ require 'rulers/version'
 Gem::Specification.new do |spec|
   spec.name          = "rulers"
   spec.version       = Rulers::VERSION
-  spec.authors       = ["SupahNickie"]
+  spec.authors       = ["Nicholas Case"]
   spec.email         = ["nicholascase@live.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{A Rack-based web framework like Rails}
+  spec.summary       = %q{A Rack-based web framework like Rails that I wrote from scratch!}
+  spec.homepage      = "https://github.com/SupahNickie/Rulers"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -20,4 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rack-test"
+  spec.add_runtime_dependency "rack"
 end
