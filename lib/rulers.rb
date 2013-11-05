@@ -1,32 +1,45 @@
 require "rulers/version"
 require "rulers/routing"
-require "rulers/array"
+require "rulers/util"
+require "rulers/dependencies"
 
 module Rulers
   class Application
+    def redirect_to(location)
+      [302, {"Location" => location}, []]
+    end
+
     def call(env)
+      `echo debug > debug.txt`
       if env['PATH_INFO'] == '/favicon.ico'
         return [404, {'Content-Type' => 'text/html'}, []]
       end
+      if env['PATH_INFO'] == '/'
+        redirect_to "/home/index"
+      end
 
       klass, act = get_controller_and_action(env)
+      controller = klass.new(env)
       begin
-        controller = klass.new(env)
         text = controller.send(act)
-        [200, {'Content-Type' => 'text/html'}, [text]]
-      rescue
-        return [404, {'Content-Type' => 'text/html'}, ["Sorry, but your page isn't here!"]]
+      rescue Exception => e
+        text = "<!DOCTYPE html><html><head></head><body>"
+        text += "Sorry, a #{e.class}:#{e.message} exception happened.<br>\n"
+        text += "<ul>"
+        e.backtrace.each do |line|
+          text += "<li>#{line}</li>"
+        end
+        text += "</ul></body></html>"
       end
+      [200, {'Content-Type' => 'text/html'}, [text]]
     end
   end
 
   class Controller
+    attr_reader :env
+
     def initialize(env)
       @env = env
-    end
-
-    def env
-      @env
     end
   end
 
