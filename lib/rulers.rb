@@ -3,6 +3,7 @@ require "rulers/routing"
 require "rulers/util"
 require "rulers/dependencies"
 require "rulers/controller"
+require "rulers/file_model"
 
 module Rulers
   class Application
@@ -16,7 +17,7 @@ module Rulers
         return [404, {'Content-Type' => 'text/html'}, []]
       end
       if env['PATH_INFO'] == '/'
-        redirect_to "/home/index"
+        return [404, {'Content-Type' => 'text/html'}, ["No home page yet"]]
       end
 
       klass, act = get_controller_and_action(env)

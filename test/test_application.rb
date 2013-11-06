@@ -2,7 +2,7 @@ require_relative "test_helper"
 
 class TestController < Rulers::Controller
   def index
-    "Hello!"
+    "Hello Ruby on Rulers, you cruel wench"
   end
 end
 
@@ -20,7 +20,7 @@ class RulersAppTest < Test::Unit::TestCase
   end
 
   def test_request
-    get "/"
+    get "/index"
 
     assert last_response.ok?
     body = last_response.body
