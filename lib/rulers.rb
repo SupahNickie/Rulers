@@ -12,7 +12,7 @@ module Rulers
     end
 
     def call(env)
-      `echo debug > debug.txt`
+      # `echo debug > debug.txt`
       if env['PATH_INFO'] == '/favicon.ico'
         return [404, {'Content-Type' => 'text/html'}, []]
       end
@@ -24,6 +24,11 @@ module Rulers
       controller = klass.new(env)
       begin
         text = controller.send(act)
+        if controller.get_response
+          st, hd, rs = controller.get_response.to_a[st, hd, [rs.body].flatten]
+        else
+          [200, {'Content-Type' => 'text/html'}, [text]]
+        end
       rescue Exception => e
         text = "<!DOCTYPE html><html><head></head><body>"
         text += "Sorry, a #{e.class}:#{e.message} exception happened.<br>\n"
