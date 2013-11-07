@@ -45,13 +45,14 @@ module Rulers
       end
 
       def self.update(attrs)
-        if ENV["REQUEST_METHOD"] == "POST"
-          hash = {}
-          hash["submitter"] = attrs["submitter"] || ""
-          hash["quote"] = attrs["quote"] || ""
-          hash["attribution"] = attrs["attribution"] || ""
-          File.open("db/quotes/#{id}.json", "w") do |f|
-            f.write <<TEMPLATE
+        return false if self.find(attrs["id"]).nil?
+          if ENV["REQUEST_METHOD"] == "POST"
+            hash = {}
+            hash["submitter"] = attrs["submitter"] || ""
+            hash["quote"] = attrs["quote"] || ""
+            hash["attribution"] = attrs["attribution"] || ""
+            File.open("db/quotes/#{attrs["id"]}.json", "w") do |f|
+              f.write <<TEMPLATE
 {
   "submitter": "#{hash["submitter"]}",
   "quote": "#{hash["quote"]}",
@@ -59,8 +60,6 @@ module Rulers
 }
 TEMPLATE
           end
-
-          FileModel.save "db/quotes/#{id}.json"
         end
       end
 

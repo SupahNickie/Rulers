@@ -12,7 +12,6 @@ module Rulers
     end
 
     def call(env)
-      # `echo debug > debug.txt`
       if env['PATH_INFO'] == '/favicon.ico'
         return [404, {'Content-Type' => 'text/html'}, []]
       end
@@ -25,7 +24,8 @@ module Rulers
       begin
         text = controller.send(act)
         if controller.get_response
-          st, hd, rs = controller.get_response.to_a[st, hd, [rs.body].flatten]
+          st, hd, rs = controller.get_response.to_a
+          [st, hd, rs.body]
         else
           [200, {'Content-Type' => 'text/html'}, [text]]
         end
@@ -37,8 +37,8 @@ module Rulers
           text += "<li>#{line}</li>"
         end
         text += "</ul></body></html>"
+        [200, {'Content-Type' => 'text/html'}, [text]]
       end
-      [200, {'Content-Type' => 'text/html'}, [text]]
     end
   end
 
